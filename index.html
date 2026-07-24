@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XSA9 Wrangle Occupation</title>
+    <title>XSA9/XTR1 Wrangle Occupation (Temporary)</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -166,7 +166,6 @@
         tr { border-bottom: 1px solid var(--tr-border); }
         tr:hover { background-color: var(--tr-hover); }
         td { padding: 4px 3px; vertical-align: top; }
-        td input { width: 100%; box-sizing: border-box; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; padding: 8px 6px; font-size: 12px; }
         .auto-wrap-cell { width: 100%; min-height: 33px; box-sizing: border-box; background-color: var(--input-bg); color: var(--input-text); border: 1px solid var(--input-border); border-radius: 4px; padding: 8px 6px; font-size: 12px; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
 
         .cpt-earliest { background: linear-gradient(135deg, #7f1d1d, #991b1b) !important; color: #fecaca !important; font-weight: 700; border: 1px solid #ef4444 !important; }
@@ -179,7 +178,6 @@
         [data-theme="light"] .risk-med { background-color: #fef08a !important; color: #854d0e !important; }
         [data-theme="light"] .risk-low { background-color: #d1fae5 !important; color: #065f46 !important; }
 
-        .t1-c1 { width: 10%; } .t1-c2 { width: 10%; } .t1-c3 { width: 16%; } .t1-c4 { width: 8%; } .t1-c5 { width: 16%; } .t1-c6 { width: 14%; } .t1-c7 { width: 14%; } .t1-c8 { width: 12%; }
         .t2-c1 { width: 7%; } .t2-c2 { width: 7%; } .t2-c3 { width: 9%; } .t2-c4 { width: 10%; } .t2-c5 { width: 9%; } .t2-c6 { width: 9%; } .t2-c7 { width: 8%; } .t2-c8 { width: 8%; } .t2-c9 { width: 8%; } .t2-c10 { width: 8%; } .t2-c11 { width: 11%; } .t2-c12 { width: 6%; }
 
         .action-bar { margin-top: 15px; display: flex; justify-content: flex-end; gap: 12px; }
@@ -229,7 +227,7 @@
 <body>
 
     <div class="header">
-        <h1>XSA9 Wrangle Occupation</h1>
+        <h1>XSA9/XTR1 Wrangle Occupation (Temporary)</h1>
         <button class="theme-btn" id="theme-toggle-btn">🌙 Koyu Mod</button>
     </div>
 
@@ -246,7 +244,7 @@
         </div>
     </div>
 
-    <div class="paste-hint">💡 BATCH BUFFER ASSIGNMENTS tablosuna en sol üst hücreden SORTATION tablosundaki cvBUFFERA.. verilerini yapıştırın ve .csv dosyalarını yükleyin. (Odaklanmak için tabloda satıra çift tıklayın)</div>
+    <div class="paste-hint">💡 BATCH ve Buffer bilgileri yüklediğiniz .csv dosyalarından otomatik olarak tespit edilecektir. Sadece geçerli BATCH ID'si olan satırlar listelenir. Lütfen dosyaları yükleyin. (Detaylar için tablodaki satıra çift tıklayın)</div>
 
     <div class="dashboard-top">
         <div class="stat-card" id="card-all" onclick="setCardFilter('all', this)">
@@ -282,23 +280,7 @@
 
     <div class="dashboard-grid">
         <div class="main-container">
-            <div class="table-title">BATCH BUFFER ASSIGNMENTS</div>
-            <div class="table-responsive">
-                <table class="data-table" id="table-assignments">
-                    <thead>
-                        <tr>
-                            <th class="t1-c1">Batch ID</th><th class="t1-c2">Buffer</th><th class="t1-c3">ExSD</th>
-                            <th class="t1-c4">Time Since</th><th class="t1-c5">Assignment</th><th class="t1-c6">Pick St.</th>
-                            <th class="t1-c7">Buf St.</th><th class="t1-c8">Sort</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="main-container">
-            <div class="table-title">Summary</div>
+            <div class="table-title">Summary & Auto Assignments</div>
             
             <div class="search-container" style="display: flex; gap: 10px;">
                 <input type="text" id="searchInput" class="search-input" placeholder="🔍 Ara..." onkeyup="applyFilters()" style="flex: 1;">
@@ -335,16 +317,16 @@
         </div>
 
         <div class="main-container" id="aged-totes-container" style="display: none;">
-            <div class="table-title" style="background-color: #dc2626;">🚨 Late Totes (>30 Dakika)</div>
+            <div class="table-title" style="background-color: #dc2626;">🚨 Late Totes (>30 Mins)</div>
             <div class="table-responsive">
                 <table class="data-table" id="table-aged-totes">
                     <thead>
                         <tr>
-                            <th style="width: 20%;">Batch ID ↕</th>
-                            <th style="width: 20%;">Process Path ↕</th>
-                            <th style="width: 25%;">Tote (Scannable ID) ↕</th>
-                            <th style="width: 15%;">CPT ↕</th>
-                            <th style="width: 20%;">Stage ↕</th>
+                            <th style="width: 20%; cursor: pointer;" onclick="sortAgedTable(0)">Batch ID ↕</th>
+                            <th style="width: 20%; cursor: pointer;" onclick="sortAgedTable(1)">Process Path ↕</th>
+                            <th style="width: 20%; cursor: pointer;" onclick="sortAgedTable(2)">Tote (Scannable ID) ↕</th>
+                            <th style="width: 20%; cursor: pointer;" onclick="sortAgedTable(3)">CPT ↕</th>
+                            <th style="width: 20%; cursor: pointer;" onclick="sortAgedTable(4)">Stage ↕</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -389,27 +371,18 @@
         let activeCardFilter = null; 
 
         function initBlankRows() {
-            createTableRows('table-assignments', 8, 15);
-            createTableRows('table-summary', 12, 15);
-            updateDashboardStats();
-            setupTableSorting();
-            setupFocusMode();
-        }
-
-        function createTableRows(tableId, colCount, rowCount) {
-            const tbody = document.getElementById(tableId).querySelector('tbody');
+            const tbody = document.getElementById('table-summary').querySelector('tbody');
             tbody.innerHTML = '';
-            for (let r = 0; r < rowCount; r++) {
+            for (let r = 0; r < 12; r++) {
                 let tr = document.createElement('tr');
-                for (let c = 0; c < colCount; c++) {
-                    if (tableId === 'table-summary') {
-                        tr.innerHTML += '<td><div class="auto-wrap-cell"></div></td>';
-                    } else {
-                        tr.innerHTML += '<td><input type="text"></td>';
-                    }
+                for (let c = 0; c < 12; c++) {
+                    tr.innerHTML += '<td><div class="auto-wrap-cell"></div></td>';
                 }
                 tbody.appendChild(tr);
             }
+            updateDashboardStats();
+            setupTableSorting();
+            setupFocusMode();
         }
 
         function setupDragAndDrop(dropzoneId, inputId, type) {
@@ -434,9 +407,23 @@
                 const text = e.target.result;
                 const lines = text.split(/\r\n|\n/);
                 const parsedRows = lines.slice(1).map(line => {
-                    // Çift tırnak içindeki virgülleri yoksayarak sütunlara böler
                     return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/^"|"$/g, '').trim());
-                }).filter(r => r.length > 1);
+                }).filter(r => {
+                    // Satır boşsa atla
+                    if (r.length <= 1) return false;
+                    
+                    // 14. Sütun (0 tabanlı sistemde index 13) değerini al
+                    const col14 = r[13];
+                    
+                    // Eğer ManifestPending veya ManifestPendingVerification ise bu satırı (false döndürerek) okuma
+                    if (col14 === "ManifestPending" || col14 === "ManifestPendingVerification" || col14 === "ProblemSolving" ) {
+                        return false;
+                    }
+                    
+                    // Diğer tüm durumlar için satırı dahil et
+                    return true;
+                });
+                
                 if (type === 'con4') con4Rows = parsedRows;
                 if (type === 'wip') wipRows = parsedRows;
 
@@ -444,20 +431,6 @@
                 if (combinedDatabase.length > 0) processAndCalculate();
             };
             reader.readAsText(file);
-        }
-
-        function syncToSummaryOnly(rowIndex, batchVal, bufferVal) {
-            const summaryTbody = document.getElementById('table-summary').querySelector('tbody');
-            while (summaryTbody.children.length <= rowIndex) {
-                let newTr = document.createElement('tr');
-                for (let i = 0; i < 12; i++) newTr.innerHTML += '<td><div class="auto-wrap-cell"></div></td>';
-                summaryTbody.appendChild(newTr);
-            }
-            const summaryTr = summaryTbody.children[rowIndex];
-            if (summaryTr) {
-                summaryTr.children[0].querySelector('.auto-wrap-cell').textContent = bufferVal;
-                summaryTr.children[1].querySelector('.auto-wrap-cell').textContent = batchVal;
-            }
         }
 
         function applyProgressBar(element, percent) {
@@ -468,7 +441,7 @@
         }
 
         function getRiskScore(cptStr, pickStatus, bufferStatus, pickPercent, bufferPercent, earliestTimestamp) {
-            if (!cptStr || (pickStatus === "Complete" && bufferStatus === "Complete")) return 0;
+            if (!cptStr || cptStr === "-" || (pickStatus === "Complete" && bufferStatus === "Complete")) return 0;
 
             let timeRisk = 0;
             let cptDate = new Date(cptStr);
@@ -501,85 +474,144 @@
         }
 
         function processAndCalculate() {
-            const assignRows = document.getElementById('table-assignments').querySelectorAll('tbody tr');
             const summaryTbody = document.getElementById('table-summary').querySelector('tbody');
-
+            summaryTbody.innerHTML = '';
+            
             heatmapData = {}; 
             let alertsList = [];
             let earliestTimestamp = null;
-            
-            assignRows.forEach(tr => {
-                const cptInput = tr.children[2].querySelector('input').value.trim();
-                if (cptInput) {
-                    const dt = new Date(cptInput);
-                    if (!isNaN(dt.getTime())) {
-                         if (earliestTimestamp === null || dt < earliestTimestamp) earliestTimestamp = dt.getTime();
+            let agedTotesMap = new Map();
+            let batches = {};
+
+            // 1. Gruplama ve Veri Çıkarımı
+            const targetProcessPaths = ["PPSingles", "PPMultiSmallMPPB", "PPMultiNonSort", "PPGiftWrap", "PPGiftWrapSingles"];
+
+            combinedDatabase.forEach(row => {
+                let batchId = row[11] && row[11].trim() !== "" ? row[11].trim() : null;
+                
+                // Batch ID yoksa bu satırı tamamen atla
+                if (!batchId) return;
+
+                if (!batches[batchId]) {
+                    batches[batchId] = {
+                        data: [],
+                        cptValue: row[3] || "-", 
+                        bufferNo: "-"
+                    };
+                }
+                batches[batchId].data.push(row);
+
+                // Otomatik Buffer Tespiti (Lokasyon cvBUFFER ise)
+                let loc = row[5] || "";
+                if (loc.startsWith("cvBUFFER")) {
+                    let cleanBuffer = loc.replace("cvBUFFER", "").trim();
+                    batches[batchId].bufferNo = cleanBuffer || loc;
+                }
+
+                // Gecikmiş Toteler
+                let processPath = row[9] || "-";
+                let stage = row[13] || "";
+                let toteId = row[4] || "Bilinmiyor";
+                let cptValue = row[3] || "-";
+                let dwellTime = parseFloat(row[14]) || 0;
+                let stageLower = stage.toLowerCase();
+                let isTargetStage = stageLower.includes("inprogress") || stageLower.includes("intransit") || stageLower.includes("atdestination");
+
+                // DWELL TIME 2 saatten 30 dakikaya (0.5 saat) düşürüldü
+                if (dwellTime > 0.5 && targetProcessPaths.includes(processPath) && isTargetStage) {
+                    if (!agedTotesMap.has(toteId)) {
+                        let displayStage = stage.replace("PickingPicked", "");
+                        agedTotesMap.set(toteId, {
+                            batch: batchId,
+                            path: processPath, 
+                            tote: toteId, 
+                            cpt: cptValue, 
+                            stage: displayStage, 
+                            dwell: dwellTime.toFixed(2)
+                        });
                     }
                 }
             });
 
-            assignRows.forEach((tr, index) => {
-                const batchId = tr.children[0].querySelector('input').value.trim();
-                const bufferNo = tr.children[1].querySelector('input').value.trim();
-
-                if (!batchId) {
-                    const sTr = summaryTbody.children[index];
-                    if(sTr) {
-                        Array.from(sTr.children).forEach(td => {
-                            const cell = td.querySelector('.auto-wrap-cell');
-                            if (cell) { 
-                                cell.textContent = ""; cell.removeAttribute('data-score'); 
-                                cell.style.removeProperty('background'); cell.style.removeProperty('background-color'); cell.style.removeProperty('color'); cell.style.removeProperty('border');
-                            }
-                        });
-                        sTr.removeAttribute('data-heatmap');
+            // 2. En Erken CPT Belirleme
+            Object.values(batches).forEach(b => {
+                if (b.cptValue && b.cptValue !== "-") {
+                    const dt = new Date(b.cptValue);
+                    if (!isNaN(dt.getTime())) {
+                        if (earliestTimestamp === null || dt < earliestTimestamp) earliestTimestamp = dt.getTime();
                     }
-                    return;
                 }
+            });
 
-                syncToSummaryOnly(index, batchId, bufferNo);
-                const sTr = summaryTbody.children[index];
+            // 3. Hesaplamalar ve Summary Tablosunu Doldurma
+            Object.keys(batches).forEach(batchId => {
+                let batchData = batches[batchId].data;
+                
+                // YENİ KURAL 1: Belirtilen statülerden en az 1 tanesi bile yoksa batch'i atla
+                const requiredStatuses = [
+                    "PickingNotYetPickedPrioritized", 
+                    "PickingNotYetPickedNotPrioritized", 
+                    "PickingNotYetPickedNonPickable", 
+                    "RebinBuffered", 
+                    "Sorted"
+                ];
+                const hasRequiredStatus = batchData.some(row => requiredStatuses.includes(row[13]));
+                
+                if (!hasRequiredStatus) return; // Batch'i atla (Tabloya yazdırma)
 
-                let batchData = combinedDatabase.filter(r => r[11] === batchId || r[0] === batchId);
+                let cptValue = batches[batchId].cptValue;
+                let bufferNo = batches[batchId].bufferNo;
+                let processPath = batchData.length > 0 ? (batchData[0][9] || "-") : "-";
 
                 let pickStatus = "Complete", bufferStatus = "Complete", tumuBufferMi = true;
-                let sortStatusSet = new Set(), processPath = "-", cptValue = "";
-                let localIP = new Set(), localIT = new Set(), localAD = new Set(), zoneNotYetQtyDict = {};
+                let hasSorted = false; // En az 1 tane Sorted var mı?
+                let allSorted = true;  // Hepsi Sorted mi?
+                let sortStatusSet = new Set(), localIP = new Set(), localIT = new Set(), localAD = new Set(), zoneNotYetQtyDict = {};
                 let totalQty = 0, pickedQty = 0, bufferedQty = 0;
 
-                if (batchData.length > 0) {
-                    processPath = batchData[0][9] || "-";
-                    cptValue = tr.children[2].querySelector('input').value.trim();
+                batchData.forEach(row => {
+                    let loc = row[5] || "", stat = row[13] || "", zone = row[4] || "", qty = parseFloat(row[12]) || 0;
+                    totalQty += qty;
 
-                    batchData.forEach(row => {
-                        let loc = row[5] || "", stat = row[13] || "", zone = row[4] || "", qty = parseFloat(row[12]) || 0;
-                        totalQty += qty;
-
-                        if (!loc.startsWith("cvBUFFER") && !loc.startsWith("rePOPS")) tumuBufferMi = false;
-                        else bufferedQty += qty;
+                    if (!loc.startsWith("cvBUFFER") && !loc.startsWith("rePOPS")) tumuBufferMi = false;
+                    else bufferedQty += qty;
+                    
+                    if (stat.toLowerCase().includes("pickingnotyetpicked")) {
+                        pickStatus = "Continue";
+                        let zoneKey = zone.trim().substring(0, 5);
+                        if (zoneKey) zoneNotYetQtyDict[zoneKey] = (zoneNotYetQtyDict[zoneKey] || 0) + qty;
                         
-                        if (stat.toLowerCase().includes("pickingnotyetpicked")) {
-                            pickStatus = "Continue";
-                            let zoneKey = zone.trim().substring(0, 5);
-                            if (zoneKey) zoneNotYetQtyDict[zoneKey] = (zoneNotYetQtyDict[zoneKey] || 0) + qty;
-                        } else pickedQty += qty;
-
-                        if (stat.toLowerCase().includes("pickingnotyetpicked")) {
-                            let zKey = zone.trim().substring(0, 5);
-                            if (zKey && processPath !== "-") {
-                                if (!heatmapData[processPath]) heatmapData[processPath] = {};
-                                heatmapData[processPath][zKey] = (heatmapData[processPath][zKey] || 0) + qty;
-                            }
+                        if (zoneKey && processPath !== "-") {
+                            if (!heatmapData[processPath]) heatmapData[processPath] = {};
+                            heatmapData[processPath][zoneKey] = (heatmapData[processPath][zoneKey] || 0) + qty;
                         }
+                    } else {
+                        pickedQty += qty;
+                    }
 
-                        if (stat === "Sorted") sortStatusSet.add(zone);
-                        if (stat === "PickingPickedInProgress") localIP.add(zone);
-                        if (stat === "PickingPickedInTransit") localIT.add(zone);
-                        if (stat === "PickingPickedAtDestination") localAD.add(zone);
-                    });
-                }
+                    if (stat === "Sorted") {
+                        hasSorted = true; // YENİ KURAL 2 İÇİN BAYRAK
+                        let displayZone = zone.trim();
+                        if (displayZone.startsWith("rbSM") && displayZone.length >= 7) {
+                            displayZone = displayZone.substring(0, 7);
+                        }
+                        sortStatusSet.add(displayZone);
+                    } else {
+                        allSorted = false; // YENİ KURAL 3 İÇİN BAYRAK (Biri bile Sorted değilse false olur)
+                    }
+
+                    if (stat === "PickingPickedInProgress") localIP.add(zone);
+                    if (stat === "PickingPickedInTransit") localIT.add(zone);
+                    if (stat === "PickingPickedAtDestination") localAD.add(zone);
+                });
 
                 if (!tumuBufferMi) bufferStatus = "Continue";
+                
+                // YENİ KURAL 2: En az 1 tanesi Sorted ise buffer status zorunlu "Complete" olsun
+                if (hasSorted) {
+                    bufferStatus = "Complete";
+                }
+
                 let pickPercent = totalQty > 0 ? (pickedQty / totalQty) * 100 : (pickStatus === "Complete" ? 100 : 0);
                 let bufferPercent = totalQty > 0 ? (bufferedQty / totalQty) * 100 : (bufferStatus === "Complete" ? 100 : 0);
 
@@ -587,96 +619,71 @@
 
                 if (riskScore > 65) {
                     alertsList.push({
-                        score: riskScore,
-                        html: `⚠️ <strong>[YÜKSEK RİSK - Skor: ${riskScore.toFixed(0)}]</strong> <b>Batch ${batchId}</b> (Buffer: ${bufferNo || 'Atanmamış'}) Toplama ilerlemesi %${pickPercent.toFixed(0)}`
+                        score: riskScore, html: `⚠️ <strong>[YÜKSEK RİSK - Skor: ${riskScore.toFixed(0)}]</strong> <b>Batch ${batchId}</b> (Buffer: ${bufferNo}) Toplama ilerlemesi %${pickPercent.toFixed(0)}`
                     });
                 } else if (pickStatus === "Continue" && pickPercent < 35) {
                     alertsList.push({
-                        score: riskScore,
-                        html: `🚨 <strong>[Yavaş Toplama]</strong> <b>Batch ${batchId}</b> toplanması yavaş ilerliyor (%${pickPercent.toFixed(0)}).`
+                        score: riskScore, html: `🚨 <strong>[Yavaş Toplama]</strong> <b>Batch ${batchId}</b> toplanması yavaş ilerliyor (%${pickPercent.toFixed(0)}).`
                     });
                 }
 
-                if (sTr) {
-                    sTr.setAttribute('data-heatmap', JSON.stringify(zoneNotYetQtyDict));
+                let tr = document.createElement('tr');
+                tr.setAttribute('data-heatmap', JSON.stringify(zoneNotYetQtyDict));
 
-                    const cptCell = sTr.children[3].querySelector('.auto-wrap-cell');
-                    cptCell.textContent = cptValue; cptCell.classList.remove('cpt-earliest');
-                    sTr.children[2].querySelector('.auto-wrap-cell').textContent = processPath;
-                    
-                    const pickCell = sTr.children[4].querySelector('.auto-wrap-cell');
-                    pickCell.textContent = pickStatus;
-                    if (pickStatus === "Complete") {
-                        pickCell.style.removeProperty('background');
-                        pickCell.style.backgroundColor = "var(--bg-complete)";
-                        pickCell.style.color = "var(--text-complete)";
-                        pickCell.style.border = "1px solid var(--text-complete)";
-                    } else {
-                        pickCell.style.removeProperty('background-color');
-                        pickCell.style.removeProperty('color'); pickCell.style.removeProperty('border');
-                        applyProgressBar(pickCell, pickPercent);
-                    }
-
-                    const bufferCell = sTr.children[5].querySelector('.auto-wrap-cell');
-                    bufferCell.textContent = bufferStatus;
-                    if (bufferStatus === "Complete") {
-                        bufferCell.style.removeProperty('background');
-                        bufferCell.style.backgroundColor = "var(--bg-complete)";
-                        bufferCell.style.color = "var(--text-complete)";
-                        bufferCell.style.border = "1px solid var(--text-complete)";
-                    } else {
-                        bufferCell.style.removeProperty('background-color');
-                        bufferCell.style.removeProperty('color'); bufferCell.style.removeProperty('border');
-                        applyProgressBar(bufferCell, bufferPercent);
-                    }
-
-                    sTr.children[6].querySelector('.auto-wrap-cell').textContent = sortStatusSet.size > 0 ? [...sortStatusSet].join(' - ') : (bufferStatus === "Complete" ? "Not Started" : "-");
-                    sTr.children[7].querySelector('.auto-wrap-cell').textContent = localIP.size > 0 ? [...localIP].join(' - ') : "-";
-                    sTr.children[8].querySelector('.auto-wrap-cell').textContent = localIT.size > 0 ? [...localIT].join(' - ') : "-";
-                    sTr.children[9].querySelector('.auto-wrap-cell').textContent = localAD.size > 0 ? [...localAD].join(' - ') : "-";
-                    sTr.children[10].querySelector('.auto-wrap-cell').textContent = Object.keys(zoneNotYetQtyDict).length > 0 ? Object.keys(zoneNotYetQtyDict).map(z => `${z}: ${zoneNotYetQtyDict[z]}`).join(' - ') : "-";
-
-                    const riskCell = sTr.children[11].querySelector('.auto-wrap-cell');
-                    riskCell.textContent = riskScore > 0 ? riskScore.toFixed(0) + "/100" : "0/100";
-                    riskCell.setAttribute('data-score', riskScore);
-                    riskCell.className = 'auto-wrap-cell';
-                    if (riskScore >= 65) riskCell.classList.add('risk-high');
-                    else if (riskScore >= 35) riskCell.classList.add('risk-med');
-                    else if (riskScore > 0) riskCell.classList.add('risk-low');
+                for(let i = 0; i < 12; i++) {
+                    let td = document.createElement('td');
+                    td.innerHTML = '<div class="auto-wrap-cell"></div>';
+                    tr.appendChild(td);
                 }
+
+                tr.children[0].querySelector('.auto-wrap-cell').textContent = bufferNo;
+                tr.children[1].querySelector('.auto-wrap-cell').textContent = batchId;
+                tr.children[2].querySelector('.auto-wrap-cell').textContent = processPath;
+                tr.children[3].querySelector('.auto-wrap-cell').textContent = cptValue;
+
+                let pickCell = tr.children[4].querySelector('.auto-wrap-cell');
+                pickCell.textContent = pickStatus;
+                if (pickStatus === "Complete") {
+                    pickCell.style.backgroundColor = "var(--bg-complete)";
+                    pickCell.style.color = "var(--text-complete)";
+                    pickCell.style.border = "1px solid var(--text-complete)";
+                } else {
+                    applyProgressBar(pickCell, pickPercent);
+                }
+
+                let bufferCell = tr.children[5].querySelector('.auto-wrap-cell');
+                bufferCell.textContent = bufferStatus;
+                if (bufferStatus === "Complete") {
+                    bufferCell.style.backgroundColor = "var(--bg-complete)";
+                    bufferCell.style.color = "var(--text-complete)";
+                    bufferCell.style.border = "1px solid var(--text-complete)";
+                } else {
+                    applyProgressBar(bufferCell, bufferPercent);
+                }
+
+                // YENİ KURAL 3: Sort Status'u yazdırırken tümü Sorted ise yanına (✓) ekle
+                let sortStatusText = sortStatusSet.size > 0 ? [...sortStatusSet].join(' - ') : (bufferStatus === "Complete" ? "Not Started" : "-");
+                if (allSorted && sortStatusSet.size > 0) {
+                    sortStatusText += " (✓)";
+                }
+                tr.children[6].querySelector('.auto-wrap-cell').textContent = sortStatusText;
+                
+                tr.children[7].querySelector('.auto-wrap-cell').textContent = localIP.size > 0 ? [...localIP].join(' - ') : "-";
+                tr.children[8].querySelector('.auto-wrap-cell').textContent = localIT.size > 0 ? [...localIT].join(' - ') : "-";
+                tr.children[9].querySelector('.auto-wrap-cell').textContent = localAD.size > 0 ? [...localAD].join(' - ') : "-";
+                tr.children[10].querySelector('.auto-wrap-cell').textContent = Object.keys(zoneNotYetQtyDict).length > 0 ? Object.keys(zoneNotYetQtyDict).map(z => `${z}: ${zoneNotYetQtyDict[z]}`).join(' - ') : "-";
+
+                let riskCell = tr.children[11].querySelector('.auto-wrap-cell');
+                riskCell.textContent = riskScore > 0 ? riskScore.toFixed(0) + "/100" : "0/100";
+                riskCell.setAttribute('data-score', riskScore);
+                if (riskScore >= 65) riskCell.classList.add('risk-high');
+                else if (riskScore >= 35) riskCell.classList.add('risk-med');
+                else if (riskScore > 0) riskCell.classList.add('risk-low');
+
+                summaryTbody.appendChild(tr);
             });
 
-            // --- YENİ EKLENEN/DÜZELTİLEN: CSV Üzerinden Geciken Toteler ---
-            let agedTotesMap = new Map();
-            const targetProcessPaths = ["PPSingles", "PPMultiSmallMPPB", "PPMultiNonSort", "PPGiftWrap", "PPGiftWrapSingles"];
-
-            combinedDatabase.forEach(row => {
-                let processPath = row[9] || "-";
-                let stage = row[13] || "";
-                let toteId = row[4] || "Bilinmiyor"; 
-                let cptValue = row[3] || "-";
-                let dwellTime = parseFloat(row[14]) || 0; 
-                let batchId = row[11] || row[0] || "-"; 
-
-                let stageLower = stage.toLowerCase();
-                let isTargetStage = stageLower.includes("inprogress") || stageLower.includes("intransit") || stageLower.includes("atdestination");
-
-                // Dwell Time limitini > 2.0 yerine > 0.5 (30 dakika) yapıyoruz
-                if (dwellTime > 0.5 && targetProcessPaths.includes(processPath) && isTargetStage) {
-                    if (!agedTotesMap.has(toteId)) {
-                        let displayStage = stage.replace("PickingPicked", ""); 
-                        agedTotesMap.set(toteId, {
-                            batch: batchId,
-                            path: processPath,
-                            tote: toteId,
-                            cpt: cptValue,
-                            stage: displayStage,
-                            dwell: dwellTime.toFixed(2)
-                        });
-                    }
-                }
-            });
-
+            // Gecikmiş Totelerin Eklenmesi (Yeni format, auto-wrap-cell dahil)
             const agedTotesContainer = document.getElementById('aged-totes-container');
             const agedTotesTbody = document.getElementById('table-aged-totes').querySelector('tbody');
             agedTotesTbody.innerHTML = '';
@@ -684,7 +691,6 @@
             if (agedTotesMap.size > 0) {
                 agedTotesMap.forEach(item => {
                     let tr = document.createElement('tr');
-                    // Batch sütununu da ekledik
                     tr.innerHTML = `
                         <td><div class="auto-wrap-cell">${item.batch}</div></td>
                         <td><div class="auto-wrap-cell">${item.path}</div></td>
@@ -698,26 +704,12 @@
             } else {
                 agedTotesContainer.style.display = 'none';
             }
-            // -------------------------------------------------------------
 
-            // --- ORTAK CPT HESAPLAMASI VE RENKLENDİRME ---
+            // En Erken CPT Renklendirme (Summary İçin)
             let earliestDate = null;
             let cptCells = [];
-
-            // Summary Table
             summaryTbody.querySelectorAll('tr').forEach(row => {
                 const cell = row.children[3]?.querySelector('.auto-wrap-cell');
-                if (!cell || !cell.textContent.trim()) return;
-                const dt = new Date(cell.textContent.trim());
-                if (!isNaN(dt.getTime())) {
-                    cptCells.push({ cell, dt });
-                    if (earliestDate === null || dt < earliestDate) earliestDate = dt;
-                }
-            });
-
-            // Aged Totes Table
-            agedTotesTbody.querySelectorAll('tr').forEach(row => {
-                const cell = row.children[3]?.querySelector('.auto-wrap-cell'); // 3. index -> CPT
                 if (!cell || !cell.textContent.trim() || cell.textContent.trim() === "-") return;
                 const dt = new Date(cell.textContent.trim());
                 if (!isNaN(dt.getTime())) {
@@ -725,14 +717,23 @@
                     if (earliestDate === null || dt < earliestDate) earliestDate = dt;
                 }
             });
+            if (earliestDate) cptCells.forEach(item => { if (item.dt.getTime() === earliestDate.getTime()) item.cell.classList.add('cpt-earliest'); });
 
-            if (earliestDate) {
-                cptCells.forEach(item => { 
-                    if (item.dt.getTime() === earliestDate.getTime()) item.cell.classList.add('cpt-earliest'); 
-                });
-            }
-            // -------------------------------------------------------------
+            // En Erken CPT Renklendirme (Late Totes İçin)
+            let earliestDateAged = null;
+            let cptCellsAged = [];
+            agedTotesTbody.querySelectorAll('tr').forEach(row => {
+                const cell = row.children[3]?.querySelector('.auto-wrap-cell'); // CPT index 3
+                if (!cell || !cell.textContent.trim() || cell.textContent.trim() === "-") return;
+                const dt = new Date(cell.textContent.trim());
+                if (!isNaN(dt.getTime())) {
+                    cptCellsAged.push({ cell, dt });
+                    if (earliestDateAged === null || dt < earliestDateAged) earliestDateAged = dt;
+                }
+            });
+            if (earliestDateAged) cptCellsAged.forEach(item => { if (item.dt.getTime() === earliestDateAged.getTime()) item.cell.classList.add('cpt-earliest'); });
 
+            // Aksiyon Merkezi Gösterimi
             const actionPanel = document.getElementById('action-center-panel');
             const actionList = document.getElementById('action-center-list');
             
@@ -763,9 +764,9 @@
                 const bufferStatus = row.children[5]?.querySelector('.auto-wrap-cell')?.textContent.trim();
                 const bufferNo = row.children[0]?.querySelector('.auto-wrap-cell')?.textContent.trim();
                 if (pickStatus === "Continue") pickContinue++;
-                if (pickStatus === "Complete") { pickComplete++; if (bufferNo) pickCompleteBuffers.push(bufferNo); }
+                if (pickStatus === "Complete") { pickComplete++; if (bufferNo && bufferNo !== "-") pickCompleteBuffers.push(bufferNo); }
                 if (bufferStatus === "Continue") bufferContinue++;
-                if (bufferStatus === "Complete") { bufferComplete++; if (bufferNo) bufferCompleteBuffers.push(bufferNo); }
+                if (bufferStatus === "Complete") { bufferComplete++; if (bufferNo && bufferNo !== "-") bufferCompleteBuffers.push(bufferNo); }
             });
             document.getElementById('stat-batch-progress').textContent = batchInProgress;
             document.getElementById('stat-pick-continue').textContent = pickContinue;
@@ -825,10 +826,10 @@
         function applyFilters() {
             const searchInput = document.getElementById("searchInput").value.toLowerCase();
             
-            // Summary tablosunu filtreleme
-            const summaryRows = document.getElementById("table-summary").querySelector('tbody').getElementsByTagName("tr");
-            for (let i = 0; i < summaryRows.length; i++) {
-                const tr = summaryRows[i];
+            // Summary Tablosu Filtreleme
+            const rows = document.getElementById("table-summary").querySelector('tbody').getElementsByTagName("tr");
+            for (let i = 0; i < rows.length; i++) {
+                const tr = rows[i];
                 const batchId = tr.children[1]?.textContent.trim() || "";
                 if (!batchId) { tr.style.display = (searchInput === "" && !activeCardFilter) ? "" : "none"; continue; }
                 const textContent = tr.textContent.toLowerCase();
@@ -844,10 +845,10 @@
                 tr.style.display = (matchesSearch && matchesCard) ? "" : "none";
             }
 
-            // Aged Totes tablosunu filtreleme
-            const agedTotesRows = document.getElementById("table-aged-totes").querySelector('tbody').getElementsByTagName("tr");
-            for (let i = 0; i < agedTotesRows.length; i++) {
-                const tr = agedTotesRows[i];
+            // Late Totes Tablosu Filtreleme
+            const agedRows = document.getElementById("table-aged-totes").querySelector('tbody').getElementsByTagName("tr");
+            for (let i = 0; i < agedRows.length; i++) {
+                const tr = agedRows[i];
                 const textContent = tr.textContent.toLowerCase();
                 const matchesSearch = searchInput === "" || textContent.includes(searchInput);
                 tr.style.display = matchesSearch ? "" : "none";
@@ -870,59 +871,57 @@
             emptyRows.forEach(r => tbody.appendChild(r));
         }
 
-        let sortDirections = {
-            'table-summary': [],
-            'table-aged-totes': []
-        };
-
+        let sortDirections = [];
         function setupTableSorting() {
             document.querySelectorAll('#table-summary thead th').forEach((th, index) => {
                 th.style.cursor = 'pointer'; th.title = 'Sıralamak için tıklayın';
-                th.addEventListener('click', () => sortTable(index, 'table-summary'));
-            });
-
-            document.querySelectorAll('#table-aged-totes thead th').forEach((th, index) => {
-                th.style.cursor = 'pointer'; th.title = 'Sıralamak için tıklayın';
-                th.addEventListener('click', () => sortTable(index, 'table-aged-totes'));
+                th.addEventListener('click', () => sortTable(index));
             });
         }
 
-        function sortTable(columnIndex, tableId) {
-            const tbody = document.getElementById(tableId).querySelector('tbody');
+        function sortTable(columnIndex) {
+            const tbody = document.getElementById("table-summary").querySelector('tbody');
             let rows = Array.from(tbody.querySelectorAll('tr'));
-            
-            let dataRows = rows;
-            let emptyRows = [];
-            
-            if (tableId === 'table-summary') {
-                dataRows = rows.filter(r => r.children[1].textContent.trim() !== "");
-                emptyRows = rows.filter(r => r.children[1].textContent.trim() === "");
-            }
-            
-            let dir = sortDirections[tableId] && sortDirections[tableId][columnIndex] === 'asc' ? 'desc' : 'asc';
-            if (!sortDirections[tableId]) sortDirections[tableId] = [];
-            sortDirections[tableId][columnIndex] = dir;
-            
+            let dataRows = rows.filter(r => r.children[1].textContent.trim() !== "");
+            let emptyRows = rows.filter(r => r.children[1].textContent.trim() === "");
+            let dir = sortDirections[columnIndex] === 'asc' ? 'desc' : 'asc';
+            sortDirections[columnIndex] = dir;
             dataRows.sort((a, b) => {
                 let valA = a.children[columnIndex].textContent.trim(), valB = b.children[columnIndex].textContent.trim();
-                
-                if (tableId === 'table-summary' && columnIndex === 11) {
+                if (columnIndex === 11) {
                      let sA = parseFloat(a.children[11].querySelector('.auto-wrap-cell').getAttribute('data-score') || 0);
                      let sB = parseFloat(b.children[11].querySelector('.auto-wrap-cell').getAttribute('data-score') || 0);
                      return dir === 'asc' ? sA - sB : sB - sA;
                 }
-                
-                if (isNaN(valA) && isNaN(valB) && !isNaN(Date.parse(valA)) && !isNaN(Date.parse(valB))) {
-                    return dir === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
-                }
-                
+                if (isNaN(valA) && isNaN(valB) && !isNaN(Date.parse(valA)) && !isNaN(Date.parse(valB))) return dir === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
                 let cmp = valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' });
                 return dir === 'asc' ? cmp : -cmp;
             });
-            
             tbody.innerHTML = '';
             dataRows.forEach(r => tbody.appendChild(r));
             emptyRows.forEach(r => tbody.appendChild(r));
+        }
+
+        // --- LATE TOTES TABLOSU İÇİN SIRALAMA ---
+        let sortDirectionsAged = [];
+        function sortAgedTable(columnIndex) {
+            const tbody = document.getElementById("table-aged-totes").querySelector('tbody');
+            let rows = Array.from(tbody.querySelectorAll('tr'));
+            let dir = sortDirectionsAged[columnIndex] === 'asc' ? 'desc' : 'asc';
+            sortDirectionsAged[columnIndex] = dir;
+            rows.sort((a, b) => {
+                let valA = a.children[columnIndex].textContent.trim(), valB = b.children[columnIndex].textContent.trim();
+                // 3. Kolondaki (index 2) (Dwell Time: ...) metninden arındırmak için:
+                if(columnIndex === 2) {
+                    valA = valA.split('(')[0].trim();
+                    valB = valB.split('(')[0].trim();
+                }
+                if (isNaN(valA) && isNaN(valB) && !isNaN(Date.parse(valA)) && !isNaN(Date.parse(valB))) return dir === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
+                let cmp = valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' });
+                return dir === 'asc' ? cmp : -cmp;
+            });
+            tbody.innerHTML = '';
+            rows.forEach(r => tbody.appendChild(r));
         }
 
         // --- AYARLAR VE ODAK MODU ---
@@ -1002,41 +1001,6 @@
                 document.getElementById('focus-overlay').style.display = 'none';
             }
         }
-
-        // --- YAPIŞTIRMA VE GENEL İŞLEMLER ---
-        document.getElementById('table-assignments').addEventListener('paste', function (e) {
-            e.preventDefault();
-            const clipboardData = e.clipboardData || window.clipboardData;
-            const pastedData = clipboardData.getData('Text');
-            const activeInput = document.activeElement;
-            if (!activeInput || activeInput.tagName !== 'INPUT') return;
-
-            const activeTd = activeInput.closest('td'); const activeTr = activeInput.closest('tr');
-            const startColIndex = Array.from(activeTr.children).indexOf(activeTd);
-            const startRowIndex = Array.from(activeTr.parentNode.children).indexOf(activeTr);
-
-            const rows = pastedData.split(/\r\n|\n|\r/);
-            const tbody = this.querySelector('tbody');
-            const colCount = this.querySelectorAll('thead th').length;
-
-            rows.forEach((row, rowIndex) => {
-                if (row.trim() === '') return;
-                const columns = row.split('\t');
-                const targetRowIndex = startRowIndex + rowIndex;
-                let targetTr = tbody.children[targetRowIndex];
-                if (!targetTr) {
-                    targetTr = document.createElement('tr');
-                    for (let i = 0; i < colCount; i++) targetTr.innerHTML += '<td><input type="text"></td>';
-                    tbody.appendChild(targetTr);
-                }
-                columns.forEach((colData, colIndex) => {
-                    const targetTd = targetTr.children[startColIndex + colIndex];
-                    if (targetTd) { const input = targetTd.querySelector('input'); if (input) input.value = colData.trim(); }
-                });
-                syncToSummaryOnly(targetRowIndex, targetTr.children[0]?.querySelector('input')?.value.trim() || "", targetTr.children[1]?.querySelector('input')?.value.trim() || "");
-            });
-            processAndCalculate();
-        });
 
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         themeToggleBtn.addEventListener('click', () => {
